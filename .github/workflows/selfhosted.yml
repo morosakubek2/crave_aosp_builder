@@ -27,6 +27,7 @@ on:
           - 'LineageOS 18.1'
           - 'LineageOS 16.0'
           - 'CyanogenMOD 14.1'
+          - 'VoltageOS 15'
           - 'AOSP'
       BUILD_DIFFERENT_ROM:
         description: "Command to initialize a different 'repo' project:"
@@ -182,6 +183,11 @@ jobs:
           export PROJECTID="86"
           export REPO_INIT="repo init -u https://github.com/RisingTechOSS/android.git -b fifteen --git-lfs --depth=1"
         ;;
+        "VoltageOS 15")
+          export PROJECTFOLDER="/crave-devspaces/Voltage15"
+          export PROJECTID="86"
+          export REPO_INIT="repo init -u https://github.com/VoltageOS/manifest.git -b 15-qpr1 --git-lfs --depth=1"
+        ;;
         "LineageOS 18.1")
           export PROJECTFOLDER="/crave-devspaces/Lineage18"
           export PROJECTID="85"
@@ -206,6 +212,8 @@ jobs:
 
         if [[ ${{ github.event.inputs.PRODUCT_NAME }} == *_* ]] && [[ ${{ github.event.inputs.PRODUCT_NAME }} != gsi_* ]] && [[ ${{ github.event.inputs.PRODUCT_NAME }} != sdk_* ]] && [[ ${{ github.event.inputs.PRODUCT_NAME }} != *_sprout ]] && [[ ${{ github.event.inputs.PRODUCT_NAME }} != Mi439_* ]] && [[ ${{ github.event.inputs.PRODUCT_NAME }} != Mi8937_* ]]; then
           LUNCH="lunch ${{ github.event.inputs.PRODUCT_NAME }}-${{ github.event.inputs.BUILD_TYPE }}"
+        elif [[ "${{ github.event.inputs.BASE_PROJECT }}" == "VoltageOS 15" ]] && [[ "${{ github.event.inputs.BUILD_DIFFERENT_ROM }}" == "echo 'Build Starting!'" ]]; then
+            LUNCH="brunch ${{ github.event.inputs.PRODUCT_NAME }} ${{ github.event.inputs.BUILD_TYPE }}"
         elif [[ "${{ github.event.inputs.BASE_PROJECT }}" == "RisingOS 15" ]] && [[ "${{ github.event.inputs.BUILD_DIFFERENT_ROM }}" == "echo 'Build Starting!'" ]]; then
             LUNCH="riseup ${{ github.event.inputs.PRODUCT_NAME }} ${{ github.event.inputs.BUILD_TYPE }}"
         else
